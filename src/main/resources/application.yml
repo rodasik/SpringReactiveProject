@@ -1,0 +1,20 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+spring:
+  codec:
+    max-in-memory-size: 10MB
+  profiles:
+    active: development
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+    default-property-inclusion: non_null
+server:
+  error:
+    include-stacktrace: never
+  port: 8888

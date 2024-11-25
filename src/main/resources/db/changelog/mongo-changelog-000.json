@@ -1,0 +1,75 @@
+{
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "id": "1",
+        "author": "test",
+        "comment": "Create users collection",
+        "changes": [
+          {
+            "createCollection": {
+              "collectionName": "users"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "changeSet": {
+        "id": "2",
+        "author": "test",
+        "comment": "Populate users table",
+        "changes": [
+          {
+            "insertMany": {
+              "collectionName": "users",
+              "documents": {
+                "$rawJson": [
+                  {
+                    "_id": {"$binary": "7BFgTWA8jsUDABOsQgLTgQ==", "$type": "03"},
+                    "_class": "org.rodasik.springex.dal.entities.User",
+                    "email": "test@test.com",
+                    "firstName": "TestAdmin",
+                    "lastName": "1",
+                    "username": "testadmin",
+                    "roles": ["ADMIN"]
+                  },
+                  {
+                    "_id": {"$binary": "7BG1TTCxKtUDABOsQgLTgQ==", "$type": "03"},
+                    "_class": "org.rodasik.springex.dal.entities.User",
+                    "email": "test1@test.com",
+                    "firstName": "TestUser",
+                    "lastName": "1",
+                    "username": "testuser",
+                    "roles": ["USER"]
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "rollback" : [
+          {
+            "runCommand": {
+              "command": {
+                "$rawJson": {
+                  "delete": "users",
+                  "deletes": [
+                    {
+                      "q": {
+                        "age": {
+                          "$lt" : 60
+                        }
+                      },
+                      "limit" : 0
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

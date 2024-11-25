@@ -1,0 +1,51 @@
+version: "3.5"
+services:
+  mongodb:
+    image: mongo
+    container_name: springex-mongo
+    volumes:
+      - mongodata:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - backend
+
+  postgres:
+    image: postgres
+    container_name: springex-postgres
+    volumes:
+      - ./postgres_data:/var/lib/postgresql:rw
+      - ./deployments:/opt/jboss/wildfly/standalone/deployments:rw
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:16.0.0
+    container_name: springex-keycloak
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: springex-postgres
+      DB_PORT: 5432
+      DB_USER: keycloak
+      DB_PASSWORD: password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: Pa55w0rd
+    ports:
+      - 9080:8080
+      - 9081:9990
+    depends_on:
+      - postgres
+
+volumes:
+  mongodata:
+#    driver: local-persist
+#    driver_opts:
+#      mountpoint: ./data
+
+networks:
+  frontend:
+  backend:
